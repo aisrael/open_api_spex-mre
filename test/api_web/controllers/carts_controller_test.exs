@@ -22,5 +22,15 @@ defmodule ApiWeb.CartsControllerTest do
       assert %{"data" => %{"items" => items}} = json_response(conn, 201)
       assert [42, 1337] == items
     end
+
+    test "doesn't accept an empty cart", %{conn: conn} do
+      conn =
+        conn
+        |> post(Routes.carts_path(conn, :create),
+          items: []
+        )
+
+      assert %{"errors" => errors} = json_response(conn, 400)
+    end
   end
 end
